@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>TrainerSync - Onsite Fitness Companion</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <h1>TrainerSync</h1>
+        <p>教练与学员的现场双向互动闭环</p>
+      </header>
+
+      <nav class="role-tabs" aria-label="角色切换">
+        <button id="tabTrainee" class="tab-btn active">学员端</button>
+        <button id="tabTrainer" class="tab-btn">教练端</button>
+      </nav>
+
+      <main>
+        <section id="traineeView" class="panel active">
+          <div class="card hero-card">
+            <div>
+              <p class="chip">REALTIME TRAINING</p>
+              <h2>遥测数据与伴宠系统</h2>
+            </div>
+            <div class="hero-grid">
+              <div class="ring-wrap">
+                <svg class="energy-ring" viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                  <circle id="energyRingProgress" class="ring-progress" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="ring-center">
+                  <span id="energyText">0</span>
+                  <small>活力值</small>
+                </div>
+              </div>
+              <div class="stats-grid">
+                <div>
+                  <label>当前心率</label>
+                  <strong id="heartRateText">-- bpm</strong>
+                </div>
+                <div>
+                  <label>目标区间</label>
+                  <strong>120 - 150 bpm</strong>
+                </div>
+                <div>
+                  <label>伴宠等级</label>
+                  <strong id="petLevelText">Lv.1</strong>
+                </div>
+                <div>
+                  <label>增益状态</label>
+                  <strong id="boostStateText">Normal</strong>
+                </div>
+              </div>
+            </div>
+            <button id="toggleTelemetryBtn" class="primary">启动模拟心率流</button>
+            <p class="hint">当心率位于燃脂区间时，活力值会持续增长，进度环将出现脉冲动效。</p>
+          </div>
+
+          <div class="card">
+            <h2>器械打卡与教程闭环</h2>
+            <p class="hint">模拟扫码：输入器械二维码内容（如 <code>treadmill</code>、<code>bike</code>、<code>rowing</code>）</p>
+            <div class="scan-row">
+              <input id="scanInput" placeholder="输入二维码内容" />
+              <button id="scanBtn" class="secondary">模拟扫码</button>
+            </div>
+            <div id="questList" class="quest-list"></div>
+            <button id="completeEquipmentBtn" class="primary">完成当前器械任务</button>
+          </div>
+
+          <div class="card">
+            <h2>徽章墙</h2>
+            <p class="hint">每完成一种器械训练，即可点亮对应徽章。</p>
+            <div id="badgeWall" class="badge-wall"></div>
+          </div>
+        </section>
+
+        <section id="trainerView" class="panel">
+          <div class="card">
+            <h2>教练监控面板</h2>
+            <p class="hint">通过 localStorage 跨标签页同步学员状态（GitHub Pages 可直接演示）。</p>
+            <div id="traineeCard" class="trainee-card"></div>
+            <div class="action-row">
+              <button id="sendPaceBoostBtn" class="secondary">下发限时配速提升</button>
+              <button id="sendDoubleExpBtn" class="primary">发放双倍经验卡</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div id="buffPopup" class="buff-popup hidden" role="alert">
+        <div class="buff-content">
+          <h3>获得教练专注 Buff！</h3>
+          <p id="buffMessage">当前活力值获取翻倍</p>
+        </div>
+      </div>
+
+      <footer class="pet-dock">
+        <div id="petAvatar" class="pet-avatar">灵宝</div>
+        <div>
+          <p id="petStatus">状态：待机中</p>
+          <small>达到阈值会自动升级并解锁外观</small>
+        </div>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
