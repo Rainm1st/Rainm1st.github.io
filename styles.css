@@ -213,6 +213,72 @@ main { display: grid; gap: 20px; padding: 0 20px; }
   animation: alertFlash .8s infinite alternate;
 }
 .action-row { display: grid; gap: 8px; }
+.two-col { grid-template-columns: 1fr 1fr; }
+
+.phase-wrap {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+.phase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.phase-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #d5e3ff;
+}
+.phase-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.phase-progress {
+  width: 34%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #37e7c0, #4f8cff);
+  transition: width 0.35s ease;
+}
+.phase-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #9db3de;
+  font-size: 11px;
+}
+
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.coach-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.metric-tile {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px;
+}
+.metric-tile span {
+  display: block;
+  font-size: 11px;
+  color: #9fb4de;
+}
+.metric-tile strong {
+  font-size: 16px;
+}
 
 .pet-dock {
   position: fixed;
@@ -270,6 +336,8 @@ main { display: grid; gap: 20px; padding: 0 20px; }
 @media (max-width: 420px) {
   .hero-grid { grid-template-columns: 1fr; }
   .ring-wrap { margin-bottom: 2px; }
+  .two-col { grid-template-columns: 1fr; }
+  .strategy-grid { grid-template-columns: 1fr; }
 }
 @media (min-width:700px) {
   .app-shell { max-width: 760px; }
