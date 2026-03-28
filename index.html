@@ -55,7 +55,22 @@
                 </div>
               </div>
             </div>
-            <button id="toggleTelemetryBtn" class="primary">启动模拟心率流</button>
+            <div class="action-row two-col">
+              <button id="toggleTelemetryBtn" class="primary">启动模拟心率流</button>
+              <button id="startDemoBtn" class="secondary">一键 Demo 演示</button>
+            </div>
+            <div class="phase-wrap">
+              <div class="phase-header">
+                <h3>训练阶段</h3>
+                <strong id="phaseText">热身中</strong>
+              </div>
+              <div class="phase-track">
+                <div id="phaseProgress" class="phase-progress"></div>
+              </div>
+              <div class="phase-labels">
+                <span>热身</span><span>主训练</span><span>拉伸恢复</span>
+              </div>
+            </div>
             <p class="hint">当心率位于燃脂区间时，活力值会持续增长，进度环将出现脉冲动效。</p>
           </div>
 
@@ -82,10 +97,13 @@
             <h2>教练监控面板</h2>
             <p class="hint">通过 localStorage 跨标签页同步学员状态（GitHub Pages 可直接演示）。</p>
             <div id="traineeCard" class="trainee-card"></div>
-            <div class="action-row">
-              <button id="sendPaceBoostBtn" class="secondary">下发限时配速提升</button>
+            <div class="strategy-grid">
+              <button id="sendPaceBoostBtn" class="secondary">策略A：配速提升</button>
+              <button id="sendFatBurnBtn" class="secondary">策略B：稳态燃脂</button>
+              <button id="sendRecoveryBtn" class="secondary">策略C：恢复训练</button>
               <button id="sendDoubleExpBtn" class="primary">发放双倍经验卡</button>
             </div>
+            <div class="coach-metrics" id="coachMetrics"></div>
           </div>
         </section>
       </main>
