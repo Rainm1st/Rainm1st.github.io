@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -187,3 +188,194 @@
   <script src="./app.js"></script>
 </body>
 </html>
+=======
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrainerSync</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <div>
+        <h1 class="title">TrainerSync</h1>
+        <p class="subtitle">教练与学员现场互动闭环</p>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="traineeView">学员端</button>
+        <button class="tab-btn" data-tab="coachView">教练端</button>
+      </div>
+    </header>
+
+    <section id="traineeView" class="view active">
+      <div class="grid grid-2">
+        <section class="card">
+          <h3>实时训练状态</h3>
+          <div class="hr-row">
+            <div class="ring" id="hrRing"><div class="inner"><div class="num" id="hrNum">--</div><div class="small">bpm</div></div></div>
+            <div>
+              <p class="muted">目标区间：120 - 150 bpm</p>
+              <span id="zoneBadge" class="zone low">状态：待检测</span>
+              <div class="btn-row">
+                <button class="btn primary" id="toggleSimBtn">启动模拟心率</button>
+                <button class="btn" id="demoBtn">一键 Demo</button>
+              </div>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="label">活力值</div><div class="value" id="energyVal">0</div></div>
+            <div class="kpi"><div class="label">伴宠等级</div><div class="value" id="petLevel">Lv.1</div></div>
+            <div class="kpi"><div class="label">增益状态</div><div class="value" id="buffState">Normal</div></div>
+            <div class="kpi"><div class="label">训练完成</div><div class="value" id="completeRate">0%</div></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>训练阶段</h3>
+          <p class="muted">当前阶段：<b id="stageText">热身中</b></p>
+          <div class="stage-tabs">
+            <button class="stage active" data-stage="热身中">热身</button>
+            <button class="stage" data-stage="主训练">主训练</button>
+            <button class="stage" data-stage="拉伸">拉伸</button>
+            <button class="stage" data-stage="恢复">恢复</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn success" id="finishTaskBtn">完成当前器械任务</button>
+            <button class="btn warn" id="restBtn">进入恢复节奏</button>
+          </div>
+
+          <div class="pet-panel" id="petPanel">
+            <div class="pet-head">
+              <b id="petIdentity">灵宠陪伴</b>
+              <span id="petMode" class="pill">待机</span>
+            </div>
+            <div id="petAvatar" class="pet-avatar">🐼</div>
+            <div id="petActionText" class="small">灵宠正在观察你的训练，准备同步动作。</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid grid-2 mt">
+        <section class="card">
+          <h3>训练选项栏</h3>
+          <p class="muted">按肌群 / 器械筛选，点击器械查看动作指导占位区域。</p>
+
+          <div class="form-row">
+            <select id="muscleFilter" class="select">
+              <option value="all">一级筛选：全部肌群</option>
+              <option value="chest">胸部</option>
+              <option value="back">背部</option>
+              <option value="shoulders">肩部</option>
+              <option value="legs_glutes">腿部与臀部</option>
+              <option value="arms">手臂</option>
+              <option value="core">核心</option>
+            </select>
+            <select id="secondaryFilter" class="select">
+              <option value="all">二级筛选：全部专业肌肉</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <select id="equipmentTypeFilter" class="select">
+              <option value="all">器械标签：全部类型</option>
+              <option value="fixed">固定器械</option>
+              <option value="cable">绳索</option>
+              <option value="free">自由重量</option>
+              <option value="assist">辅助器械</option>
+            </select>
+            <select id="movementFilter" class="select">
+              <option value="all">动作目标：全部</option>
+              <option value="push">推</option>
+              <option value="pull">拉</option>
+              <option value="chest_fly">夹胸</option>
+              <option value="elbow_flex">屈肘</option>
+              <option value="elbow_extend">伸肘</option>
+              <option value="knee_extend">伸膝</option>
+              <option value="knee_flex">屈膝</option>
+              <option value="hip_extend">髋伸</option>
+              <option value="abduction">外展</option>
+              <option value="adduction">内收</option>
+              <option value="rotation">旋转</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <select id="levelFilter" class="select">
+              <option value="beginner">训练等级：初学者</option>
+              <option value="advanced">训练等级：进阶者</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <select id="equipmentFilter" class="select">
+              <option value="all">器械名称：全部</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <button class="btn primary" id="recommendBtn">生成今日训练建议</button>
+            <button class="btn" id="startGuideBtn">开始动作引导</button>
+          </div>
+          <div id="recommendList" class="recommend-list"></div>
+
+          <div id="equipList" class="equip-list"></div>
+
+          <div class="media-placeholder">
+            <div id="mediaTitle"><b>动作指导占位：未选择器械</b></div>
+            <div class="small">图片和视频未整理完成，先保留占位内容（后续替换真实素材）。</div>
+            <div id="videoPlaceholder" class="media-box">[ 视频占位符 ]<br />选择器械后展示对应视频区域</div>
+            <div id="imagePlaceholder" class="media-box">[ 图片占位符 ]<br />选择器械后展示动作图解区域</div>
+            <div id="exerciseGuide" class="guide-box">文字版使用说明：请选择器械查看具体动作说明与训练目标。</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>徽章墙</h3>
+          <p class="muted">完成器械训练后点亮徽章。</p>
+          <div id="badgeWall" class="badge-wall"></div>
+          <div class="challenge">
+            <div class="challenge-row">
+              <span>今日挑战进度</span>
+              <span id="challengeText">0 / 20 reps</span>
+            </div>
+            <div class="progress"><div id="challengeBar" class="progress-bar"></div></div>
+            <div class="btn-row">
+              <button class="btn success" id="doRepBtn">完成 1 组动作</button>
+              <button class="btn warn" id="resetChallengeBtn">重置挑战</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="coachView" class="view">
+      <div class="grid grid-2">
+        <section class="card">
+          <h3>教练监控面板</h3>
+          <p class="muted">通过 localStorage 演示双端同步。</p>
+          <div id="coachUsers" class="coach-users"></div>
+          <div class="btn-row">
+            <button class="btn" id="refreshCoachBtn">刷新状态</button>
+            <button class="btn warn" id="resetAllBtn">重置数据</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>教练策略下发</h3>
+          <div class="btn-row">
+            <button class="btn primary strategy-btn" data-strategy="策略A：配速提升">策略A：配速提升</button>
+            <button class="btn primary strategy-btn" data-strategy="策略B：稳态燃脂">策略B：稳态燃脂</button>
+            <button class="btn primary strategy-btn" data-strategy="策略C：恢复训练">策略C：恢复训练</button>
+            <button class="btn success" id="buffBtn">发放双倍经验卡</button>
+          </div>
+          <h3 class="mt-sm">消息日志</h3>
+          <div id="coachLog" class="log"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+>>>>>>> e19ef38 (fix: unify github pages entry files)
