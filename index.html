@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TrainerSync — CPT208 人机交互课程原型：教练与学员现场互动、心率模拟与器械指导。" />
+  <meta name="theme-color" content="#5b7bff" />
+  <title>TrainerSync · Go Trainers</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div id="toastRegion" class="toast-region" role="status" aria-live="polite" aria-relevant="additions"></div>
+  <section id="authGate" class="auth-gate">
+    <div class="auth-card">
+      <h2>TrainerSync 登录</h2>
+      <p class="muted">学员与教练使用同款登录页，不同账号进入不同端口。</p>
+      <div class="form-row">
+        <select id="authRoleSelect" class="select">
+          <option value="trainee">学员</option>
+          <option value="coach">教练</option>
+        </select>
+      </div>
+      <div class="auth-body">
+        <div class="btn-row auth-mode-row" id="traineeModeRow">
+          <button type="button" class="btn primary auth-mode-btn active" data-mode="login">登录</button>
+          <button type="button" class="btn auth-mode-btn" data-mode="register">注册</button>
+        </div>
+        <div class="auth-status" id="authStatus" hidden></div>
+        <div class="form-row">
+          <input id="authUsername" class="input" placeholder="账号（建议英文+数字）" autocomplete="username" />
+        </div>
+        <div class="form-row form-row-password">
+          <input id="authPassword" type="password" class="input" placeholder="密码" autocomplete="current-password" />
+          <button type="button" class="btn auth-eye-btn" id="toggleAuthPasswordBtn">显示</button>
+        </div>
+        <div class="form-row form-row-password" id="registerExtraRow" hidden>
+          <input id="authPasswordConfirm" type="password" class="input" placeholder="确认密码" autocomplete="new-password" />
+          <button type="button" class="btn auth-eye-btn" id="toggleAuthPasswordConfirmBtn">显示</button>
+        </div>
+        <div class="small" id="authHint">教练仅支持登录，账号由项目组发放。</div>
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="authSubmitBtn">进入系统</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <main id="main" class="container">
+    <header class="header">
+      <div>
+        <h1 class="title">TrainerSync</h1>
+        <p class="subtitle">教练与学员现场互动闭环</p>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="traineeView">学员端</button>
+        <button class="tab-btn" data-tab="coachView">教练端</button>
+      </div>
+      <div class="header-account" id="headerAccount" hidden>
+        <span class="pill" id="sessionPill">未登录</span>
+        <button type="button" class="btn" id="logoutBtn">退出登录</button>
+      </div>
+    </header>
+
+    <section id="traineeView" class="view active">
+      <div class="grid grid-2">
+        <section class="card">
+          <h3>实时训练状态</h3>
+          <div class="hr-row">
+            <div class="ring" id="hrRing"><div class="inner"><div class="num" id="hrNum">--</div><div class="small">bpm</div></div></div>
+            <div>
+              <p class="muted">目标区间：120 - 150 bpm</p>
+              <span id="zoneBadge" class="zone low">状态：待检测</span>
+              <div class="btn-row">
+                <button type="button" class="btn primary" id="toggleSimBtn">启动模拟心率</button>
+                <button type="button" class="btn" id="demoBtn">一键 Demo</button>
+              </div>
+            </div>
+          </div>
+          <div class="hr-chart-wrap" aria-hidden="true">
+            <canvas id="hrChartCanvas" height="90"></canvas>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><div class="label">活力值</div><div class="value" id="energyVal">0</div></div>
+            <div class="kpi"><div class="label">伴宠等级</div><div class="value" id="petLevel">Lv.1</div></div>
+            <div class="kpi"><div class="label">增益状态</div><div class="value" id="buffState">Normal</div></div>
+            <div class="kpi"><div class="label">训练完成</div><div class="value" id="completeRate">0%</div></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>训练阶段</h3>
+          <p class="muted">当前阶段：<b id="stageText">热身中</b></p>
+          <div class="small">已绑定教练</div>
+          <div id="myCoaches" class="recommend-list"></div>
+          <div class="stage-tabs">
+            <button class="stage active" data-stage="热身中">热身</button>
+            <button class="stage" data-stage="主训练">主训练</button>
+            <button class="stage" data-stage="拉伸">拉伸</button>
+            <button class="stage" data-stage="恢复">恢复</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn success" id="finishTaskBtn">完成当前器械任务</button>
+            <button class="btn warn" id="restBtn">进入恢复节奏</button>
+          </div>
+
+          <div class="pet-panel" id="petPanel">
+            <div class="pet-head">
+              <b id="petIdentity">灵宠陪伴</b>
+              <span id="petMode" class="pill">待机</span>
+            </div>
+            <div id="petAvatar" class="pet-avatar">🐼</div>
+            <div id="petActionText" class="small">灵宠正在观察你的训练，准备同步动作。</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid grid-2 mt">
+        <section class="card">
+          <h3>训练选项栏</h3>
+          <p class="muted">按肌群 / 器械筛选，点击器械查看动作指导占位区域。</p>
+
+          <div class="chip-scroll" id="muscleChips" role="group" aria-label="一级肌群快捷筛选"></div>
+
+          <div class="form-row legacy-select-row">
+            <select id="muscleFilter" class="select">
+              <option value="all">一级筛选：全部肌群</option>
+              <option value="chest">胸部</option>
+              <option value="back">背部</option>
+              <option value="shoulders">肩部</option>
+              <option value="legs_glutes">腿部与臀部</option>
+              <option value="arms">手臂</option>
+              <option value="core">核心</option>
+            </select>
+            <select id="secondaryFilter" class="select">
+              <option value="all">二级筛选：全部专业肌肉</option>
+            </select>
+          </div>
+          <div class="chip-scroll chip-scroll-dense" id="secondaryChips" role="group" aria-label="二级肌群快捷筛选"></div>
+          <div class="form-row legacy-select-row">
+            <select id="equipmentTypeFilter" class="select">
+              <option value="all">器械标签：全部类型</option>
+              <option value="fixed">固定器械</option>
+              <option value="cable">绳索</option>
+              <option value="free">自由重量</option>
+              <option value="assist">辅助器械</option>
+            </select>
+            <select id="movementFilter" class="select">
+              <option value="all">动作目标：全部</option>
+              <option value="push">推</option>
+              <option value="pull">拉</option>
+              <option value="chest_fly">夹胸</option>
+              <option value="elbow_flex">屈肘</option>
+              <option value="elbow_extend">伸肘</option>
+              <option value="knee_extend">伸膝</option>
+              <option value="knee_flex">屈膝</option>
+              <option value="hip_extend">髋伸</option>
+              <option value="abduction">外展</option>
+              <option value="adduction">内收</option>
+              <option value="rotation">旋转</option>
+            </select>
+          </div>
+          <div class="chip-scroll chip-scroll-dense" id="equipmentTypeChips" role="group" aria-label="器械类型快捷筛选"></div>
+          <div class="chip-scroll chip-scroll-dense" id="movementChips" role="group" aria-label="动作目标快捷筛选"></div>
+          <div class="form-row legacy-select-row">
+            <select id="levelFilter" class="select">
+              <option value="beginner">训练等级：初学者</option>
+              <option value="advanced">训练等级：进阶者</option>
+            </select>
+          </div>
+          <div class="chip-scroll chip-scroll-dense" id="levelChips" role="group" aria-label="等级快捷筛选"></div>
+          <div class="form-row legacy-select-row">
+            <select id="equipmentFilter" class="select">
+              <option value="all">器械名称：全部</option>
+            </select>
+          </div>
+          <div class="chip-scroll chip-scroll-dense" id="equipmentNameChips" role="group" aria-label="器械名称快捷筛选"></div>
+
+          <div class="form-row">
+            <button class="btn primary" id="recommendBtn">生成今日训练建议</button>
+            <button class="btn" id="startGuideBtn">开始动作引导</button>
+          </div>
+          <div id="recommendList" class="recommend-list"></div>
+
+          <div id="equipList" class="equip-list"></div>
+
+          <div class="media-placeholder">
+            <div id="mediaTitle"><b>动作指导占位：未选择器械</b></div>
+            <div class="small">图片和视频未整理完成，先保留占位内容（后续替换真实素材）。</div>
+            <div id="videoPlaceholder" class="media-box">[ 视频占位符 ]<br />选择器械后展示对应视频区域</div>
+            <div id="imagePlaceholder" class="media-box">[ 图片占位符 ]<br />选择器械后展示动作图解区域</div>
+            <div id="exerciseGuide" class="guide-box">文字版使用说明：请选择器械查看具体动作说明与训练目标。</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>徽章墙</h3>
+          <p class="muted">完成器械训练后点亮徽章。</p>
+          <div id="badgeWall" class="badge-wall"></div>
+          <div class="challenge">
+            <div class="challenge-row">
+              <span>今日挑战进度</span>
+              <span id="challengeText">0 / 20 reps</span>
+            </div>
+            <div class="progress"><div id="challengeBar" class="progress-bar"></div></div>
+            <div class="btn-row">
+              <button class="btn success" id="doRepBtn">完成 1 组动作</button>
+              <button class="btn warn" id="resetChallengeBtn">重置挑战</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="coachView" class="view" hidden>
+      <div class="grid grid-2">
+        <section class="card">
+          <h3>教练监控面板</h3>
+          <p class="muted">当前为本地演示同步（localStorage + BroadcastChannel）；跨设备需后端实时通道。</p>
+          <div class="form-row">
+            <select id="coachTraineeSelect" class="select">
+              <option value="">请选择学员</option>
+            </select>
+          </div>
+          <div class="btn-row">
+            <button class="btn" id="bindTraineeBtn">绑定该学员</button>
+            <button class="btn warn" id="unbindTraineeBtn">解除绑定</button>
+          </div>
+          <div id="boundTrainees" class="recommend-list"></div>
+          <div class="small">策略下发目标（可多选）</div>
+          <div id="coachTargets" class="recommend-list"></div>
+          <div id="coachUsers" class="coach-users"></div>
+          <div class="guide-box" id="coachAdvice">指导建议：请先绑定并选择学员。</div>
+          <div class="btn-row">
+            <button class="btn" id="refreshCoachBtn">刷新状态</button>
+            <button class="btn warn" id="resetAllBtn">重置数据</button>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>教练策略下发</h3>
+          <div class="btn-row">
+            <button class="btn primary strategy-btn" data-strategy="策略A：配速提升">策略A：配速提升</button>
+            <button class="btn primary strategy-btn" data-strategy="策略B：稳态燃脂">策略B：稳态燃脂</button>
+            <button class="btn primary strategy-btn" data-strategy="策略C：恢复训练">策略C：恢复训练</button>
+            <button class="btn success" id="buffBtn">发放双倍经验卡</button>
+          </div>
+          <h3 class="mt-sm">消息日志</h3>
+          <div id="coachLog" class="log"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <span class="site-footer-brand">TrainerSync · C3 Go Trainers</span>
+      <nav class="site-footer-links" aria-label="项目与部署">
+        <a href="https://github.com/Rainm1st/Rainm1st.github.io" target="_blank" rel="noopener noreferrer">GitHub 仓库</a>
+        <span class="site-footer-sep" aria-hidden="true">·</span>
+        <a href="https://rainm1st.github.io/" target="_blank" rel="noopener noreferrer">GitHub Pages 演示</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
