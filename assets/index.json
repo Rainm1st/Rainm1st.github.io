@@ -1,0 +1,82 @@
+{
+    "seated_chest_press": {
+        "root": "assets/seated_chest_press",
+        "img1": "assets/seated_chest_press/img1.jpeg",
+        "img2": "assets/seated_chest_press/img2.jpeg"
+    },
+    "lat_pulldown": {
+        "root": "assets/lat_pulldown",
+        "img1": "assets/lat_pulldown/img1.jpeg",
+        "img2": "assets/lat_pulldown/img2.jpeg"
+    },
+    "seated_row": {
+        "root": "assets/seated_row",
+        "img1": "assets/seated_row/img1.jpeg",
+        "img2": "assets/seated_row/img2.jpeg"
+    },
+    "high_row": {
+        "root": "assets/high_row",
+        "img1": "assets/high_row/img1.jpeg",
+        "img2": "assets/high_row/img2.jpeg"
+    },
+    "assisted_pullup": {
+        "root": "assets/assisted_pullup",
+        "img1": "assets/assisted_pullup/img1.jpeg",
+        "img2": "assets/assisted_pullup/img2.jpeg"
+    },
+    "face_pull": {
+        "root": "assets/face_pull",
+        "img1": "assets/face_pull/img1.jpeg",
+        "img2": "assets/face_pull/img2.jpeg"
+    },
+    "leg_press": {
+        "root": "assets/leg_press",
+        "img1": "assets/leg_press/img1.jpeg",
+        "img2": "assets/leg_press/img2.jpeg"
+    },
+    "leg_extension": {
+        "root": "assets/leg_extension",
+        "img1": "assets/leg_extension/img1.jpeg",
+        "img2": "assets/leg_extension/img2.jpeg"
+    },
+    "leg_curl": {
+        "root": "assets/leg_curl",
+        "img1": "assets/leg_curl/img1.jpeg",
+        "img2": "assets/leg_curl/img2.jpeg"
+    },
+    "hip_thrust": {
+        "root": "assets/hip_thrust",
+        "img1": "assets/hip_thrust/img1.jpeg",
+        "img2": "assets/hip_thrust/img2.jpeg"
+    },
+    "hip_abductor": {
+        "root": "assets/hip_abductor",
+        "img1": "assets/hip_abductor/img1.jpeg",
+        "img2": "assets/hip_abductor/img2.jpeg"
+    },
+    "hip_adductor": {
+        "root": "assets/hip_adductor",
+        "img1": "assets/hip_adductor/img1.jpeg",
+        "img2": "assets/hip_adductor/img2.jpeg"
+    },
+    "biceps_curl_machine": {
+        "root": "assets/biceps_curl_machine",
+        "img1": "assets/biceps_curl_machine/img1.jpeg",
+        "img2": "assets/biceps_curl_machine/img2.jpeg"
+    },
+    "triceps_pushdown": {
+        "root": "assets/triceps_pushdown",
+        "img1": "assets/triceps_pushdown/img1.jpeg",
+        "img2": "assets/triceps_pushdown/img2.jpeg"
+    },
+    "ab_crunch_machine": {
+        "root": "assets/ab_crunch_machine",
+        "img1": "assets/ab_crunch_machine/img1.jpeg",
+        "img2": "assets/ab_crunch_machine/img2.jpeg"
+    },
+    "cable_crunch": {
+        "root": "assets/cable_crunch",
+        "img1": "assets/cable_crunch/img1.jpeg",
+        "img2": "assets/cable_crunch/img2.jpeg"
+    }
+}
