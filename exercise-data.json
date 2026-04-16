@@ -1,244 +1,244 @@
 {
   "muscleOptions": {
     "chest": [
-      { "key": "pectoralis_major", "label": "胸大肌 Pectoralis major" },
-      { "key": "pectoralis_minor", "label": "胸小肌 Pectoralis minor" },
-      { "key": "serratus_anterior", "label": "前锯肌 Serratus anterior" },
-      { "key": "anterior_deltoid", "label": "三角肌前束 Anterior deltoid" }
+      { "key": "pectoralis_major", "label": "Pectoralis Major" },
+      { "key": "pectoralis_minor", "label": "Pectoralis Minor" },
+      { "key": "serratus_anterior", "label": "Serratus Anterior" },
+      { "key": "anterior_deltoid", "label": "Anterior Deltoid" }
     ],
     "back": [
-      { "key": "latissimus_dorsi", "label": "背阔肌 Latissimus dorsi" },
-      { "key": "trapezius", "label": "斜方肌 Trapezius" },
-      { "key": "rhomboids", "label": "菱形肌 Rhomboids" },
-      { "key": "teres_major", "label": "大圆肌 Teres major" },
-      { "key": "erector_spinae", "label": "竖脊肌 Erector spinae" },
-      { "key": "posterior_deltoid", "label": "后三角 Posterior deltoid" }
+      { "key": "latissimus_dorsi", "label": "Latissimus Dorsi" },
+      { "key": "trapezius", "label": "Trapezius" },
+      { "key": "rhomboids", "label": "Rhomboids" },
+      { "key": "teres_major", "label": "Teres Major" },
+      { "key": "erector_spinae", "label": "Erector Spinae" },
+      { "key": "posterior_deltoid", "label": "Posterior Deltoid" }
     ],
     "shoulders": [
-      { "key": "anterior_deltoid", "label": "三角肌前束 Anterior deltoid" },
-      { "key": "middle_deltoid", "label": "三角肌中束 Middle deltoid" },
-      { "key": "posterior_deltoid", "label": "三角肌后束 Posterior deltoid" },
-      { "key": "supraspinatus", "label": "冈上肌 Supraspinatus" },
-      { "key": "infraspinatus", "label": "冈下肌 Infraspinatus" },
-      { "key": "teres_minor", "label": "小圆肌 Teres minor" },
-      { "key": "subscapularis", "label": "肩胛下肌 Subscapularis" }
+      { "key": "anterior_deltoid", "label": "Anterior Deltoid" },
+      { "key": "middle_deltoid", "label": "Middle Deltoid" },
+      { "key": "posterior_deltoid", "label": "Posterior Deltoid" },
+      { "key": "supraspinatus", "label": "Supraspinatus" },
+      { "key": "infraspinatus", "label": "Infraspinatus" },
+      { "key": "teres_minor", "label": "Teres Minor" },
+      { "key": "subscapularis", "label": "Subscapularis" }
     ],
     "legs_glutes": [
-      { "key": "quadriceps", "label": "股四头肌 Quadriceps" },
-      { "key": "hamstrings", "label": "腘绳肌 Hamstrings" },
-      { "key": "glute_max", "label": "臀大肌 Gluteus maximus" },
-      { "key": "glute_med", "label": "臀中肌 Gluteus medius" },
-      { "key": "adductors", "label": "髋内收肌群 Adductors" },
-      { "key": "abductors", "label": "髋外展肌群 Abductors" },
-      { "key": "calves", "label": "腓肠肌/比目鱼肌 Calves" }
+      { "key": "quadriceps", "label": "Quadriceps Femoris" },
+      { "key": "hamstrings", "label": "Hamstrings" },
+      { "key": "glute_max", "label": "Gluteus Maximus" },
+      { "key": "glute_med", "label": "Gluteus Medius" },
+      { "key": "adductors", "label": "Hip Adductors" },
+      { "key": "abductors", "label": "Hip Abductors" },
+      { "key": "calves", "label": "Gastrocnemius & Soleus" }
     ],
     "arms": [
-      { "key": "biceps", "label": "肱二头肌 Biceps brachii" },
-      { "key": "brachialis", "label": "肱肌 Brachialis" },
-      { "key": "brachioradialis", "label": "肱桡肌 Brachioradialis" },
-      { "key": "triceps", "label": "肱三头肌 Triceps brachii" },
-      { "key": "forearm", "label": "前臂屈伸肌群 Forearm flexors/extensors" }
+      { "key": "biceps", "label": "Biceps Brachii" },
+      { "key": "brachialis", "label": "Brachialis" },
+      { "key": "brachioradialis", "label": "Brachioradialis" },
+      { "key": "triceps", "label": "Triceps Brachii" },
+      { "key": "forearm", "label": "Forearm Flexors & Extensors" }
     ],
     "core": [
-      { "key": "rectus_abdominis", "label": "腹直肌 Rectus abdominis" },
-      { "key": "obliques", "label": "腹外斜肌/腹内斜肌 Obliques" },
-      { "key": "transversus_abdominis", "label": "腹横肌 Transversus abdominis" },
-      { "key": "erector_spinae", "label": "竖脊肌 Erector spinae" },
-      { "key": "iliopsoas", "label": "髂腰肌 Iliopsoas" }
+      { "key": "rectus_abdominis", "label": "Rectus Abdominis" },
+      { "key": "obliques", "label": "Internal & External Obliques" },
+      { "key": "transversus_abdominis", "label": "Transversus Abdominis" },
+      { "key": "erector_spinae", "label": "Erector Spinae" },
+      { "key": "iliopsoas", "label": "Iliopsoas" }
     ]
   },
   "exercises": [
     {
       "id": "seated_chest_press",
-      "name": "坐姿推胸机 Seated chest press",
+      "name": "Seated Machine Chest Press",
       "group": "chest",
       "secondary": ["pectoralis_major", "anterior_deltoid"],
       "type": "fixed",
       "movement": ["push"],
-      "focus": "胸大肌为主，前三角和肱三头协同",
-      "ins": "调整座椅，使把手与中胸平齐；背部贴靠垫，双脚踩稳；向前推至手臂接近伸直但不要锁死肘部；缓慢回程。",
-      "beginnerPlan": "2-3组 x 10-12次，RPE 6-7",
-      "advancedPlan": "4组 x 6-10次，RPE 7-9"
+      "focus": "Primary focus on the pectoralis major, with synergistic engagement from the anterior deltoid and triceps brachii.",
+      "ins": "Adjust the seat height so the handles align with the mid-chest. Maintain a neutral spine against the backrest with feet firmly planted. Press the handles forward until the elbows are nearly fully extended, avoiding joint lockout. Lower the weight under control during the eccentric phase.",
+      "beginnerPlan": "2-3 sets x 10-12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 6-10 reps, RPE 7-9"
     },
     {
       "id": "lat_pulldown",
-      "name": "高位下拉机 Lat pulldown",
+      "name": "Machine Lat Pulldown",
       "group": "back",
       "secondary": ["latissimus_dorsi", "trapezius"],
       "type": "fixed",
       "movement": ["pull"],
-      "focus": "主打背阔肌与上背部",
-      "ins": "固定大腿压垫，握杠略宽于肩；先沉肩，再下拉到上胸附近；避免耸肩与后仰借力；缓慢回顶。",
-      "beginnerPlan": "2-3组 x 10-12次，RPE 6-7",
-      "advancedPlan": "4组 x 6-10次，RPE 7-9"
+      "focus": "Primary engagement of the latissimus dorsi and upper back musculature.",
+      "ins": "Secure your thighs under the knee pads. Grasp the bar with a pronated grip slightly wider than shoulder-width. Initiate the pull by depressing the scapulae, then drive the elbows down to bring the bar toward the upper chest. Avoid excessive lumbar extension or shrugging. Return the bar to the starting position with a controlled eccentric tempo.",
+      "beginnerPlan": "2-3 sets x 10-12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 6-10 reps, RPE 7-9"
     },
     {
       "id": "seated_row",
-      "name": "坐姿划船机 Seated row",
+      "name": "Seated Machine Row",
       "group": "back",
       "secondary": ["latissimus_dorsi", "rhomboids", "trapezius"],
       "type": "fixed",
       "movement": ["pull"],
-      "focus": "主打背阔肌、菱形肌、中下斜方肌",
-      "ins": "调座椅让把手与肩同高；先稳定躯干，再拉向腹部/下胸；肩胛后缩，回程慢放。",
-      "beginnerPlan": "2-3组 x 10-12次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Targets the latissimus dorsi, rhomboids, and middle-to-lower trapezius.",
+      "ins": "Adjust the seat so the chest pad is at sternum level. Maintain a stabilized torso and pull the handles toward the lower chest or abdomen. Focus on maximal scapular retraction at the peak of the concentric phase. Extend the arms slowly during the eccentric phase.",
+      "beginnerPlan": "2-3 sets x 10-12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "high_row",
-      "name": "高位划船机 High row",
+      "name": "Machine High Row",
       "group": "back",
       "secondary": ["rhomboids", "posterior_deltoid", "trapezius"],
       "type": "fixed",
       "movement": ["pull"],
-      "focus": "偏上背厚度、后三角和菱形肌",
-      "ins": "握宽把，胸部抬起；肘部向后外侧带动，把手拉向上胸；顶点短停后控制回程。",
-      "beginnerPlan": "2-3组 x 10次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Emphasizes upper back thickness, specifically targeting the posterior deltoids and rhomboids.",
+      "ins": "Utilize a wide grip with the chest elevated against the pad. Drive the elbows back and outward, pulling the handles toward the upper chest. Pause briefly at peak contraction before performing a controlled eccentric return.",
+      "beginnerPlan": "2-3 sets x 10 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "assisted_pullup",
-      "name": "辅助引体向上机 Assisted pull-up machine",
+      "name": "Machine Assisted Pull-Up",
       "group": "back",
       "secondary": ["latissimus_dorsi", "teres_major"],
       "type": "assist",
       "movement": ["pull"],
-      "focus": "背阔肌和整体拉力能力入门",
-      "ins": "选择辅助重量后跪/踩平台，核心收紧，胸部上提，肘向下向后发力；回程控制速度。",
-      "beginnerPlan": "2-3组 x 6-10次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Foundational movement for developing latissimus dorsi strength and overall vertical pulling mechanics.",
+      "ins": "Select the appropriate counterbalance weight. Kneel or step onto the platform, engage the core, and elevate the chest. Initiate the pull by driving the elbows down and back. Lower your body with a controlled eccentric tempo.",
+      "beginnerPlan": "2-3 sets x 6-10 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "face_pull",
-      "name": "绳索面拉 Face pull",
+      "name": "Cable Face Pull",
       "group": "shoulders",
       "secondary": ["posterior_deltoid", "infraspinatus", "teres_minor"],
       "type": "cable",
       "movement": ["pull"],
-      "focus": "后三角和肩袖稳定",
-      "ins": "绳索高度到面部，向额头/鼻梁方向拉；肘自然外展；肩胛后缩，回程保持张力。",
-      "beginnerPlan": "2组 x 12-15次，RPE 6-7",
-      "advancedPlan": "3-4组 x 12-15次，RPE 7-8"
+      "focus": "Targets the posterior deltoids and enhances rotator cuff stability.",
+      "ins": "Set the cable pulley to face level. Pull the rope attachment toward your forehead or the bridge of your nose, allowing the elbows to flare outward. Focus on scapular retraction and external rotation. Maintain tension throughout the return phase.",
+      "beginnerPlan": "2 sets x 12-15 reps, RPE 6-7",
+      "advancedPlan": "3-4 sets x 12-15 reps, RPE 7-8"
     },
     {
       "id": "leg_press",
-      "name": "坐姿腿举机 Leg press",
+      "name": "Seated Leg Press",
       "group": "legs_glutes",
       "secondary": ["quadriceps", "hamstrings", "glute_max"],
       "type": "fixed",
       "movement": ["knee_extend", "hip_extend"],
-      "focus": "脚位高偏臀腿后，脚位低偏股四头",
-      "ins": "背部尾骨贴实靠垫，双脚与肩同宽；屈膝约90度起始；蹬伸接近伸直但不锁膝；缓慢回程。",
-      "beginnerPlan": "2-3组 x 10-12次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "A higher foot placement emphasizes the glutes and hamstrings, while a lower placement shifts the focus to the quadriceps.",
+      "ins": "Keep your lower back and tailbone securely against the backrest with feet shoulder-width apart. Begin with knees flexed at approximately 90 degrees. Extend the hips and knees to press the sled upward, avoiding knee lockout. Lower the sled under strict control.",
+      "beginnerPlan": "2-3 sets x 10-12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "leg_extension",
-      "name": "腿屈伸机 Leg extension",
+      "name": "Machine Leg Extension",
       "group": "legs_glutes",
       "secondary": ["quadriceps"],
       "type": "fixed",
       "movement": ["knee_extend"],
-      "focus": "主打股四头肌",
-      "ins": "膝关节对准器械转轴，小腿前侧顶住滚垫；伸膝抬起，顶端短停，慢速回放。",
-      "beginnerPlan": "2组 x 12次，RPE 6-7",
-      "advancedPlan": "4组 x 10-15次，RPE 7-9"
+      "focus": "Isolation of the quadriceps femoris.",
+      "ins": "Align the knee joint with the machine's axis of rotation and position the roller pad against the lower shin. Extend the knees fully, holding the peak contraction briefly. Lower the weight slowly during the eccentric phase.",
+      "beginnerPlan": "2 sets x 12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 10-15 reps, RPE 7-9"
     },
     {
       "id": "leg_curl",
-      "name": "腿弯举机 Leg curl",
+      "name": "Machine Leg Curl",
       "group": "legs_glutes",
       "secondary": ["hamstrings"],
       "type": "fixed",
       "movement": ["knee_flex"],
-      "focus": "主打腘绳肌",
-      "ins": "膝关节与转轴对齐；脚踝后侧贴滚垫；屈膝拉向臀部，再控制放回。",
-      "beginnerPlan": "2组 x 12次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Isolation of the hamstring complex.",
+      "ins": "Align the knee joint with the machine's pivot point. Position the roller pad against the lower calf or Achilles tendon. Flex the knees to curl the weight toward the glutes. Control the eccentric extension back to the starting position.",
+      "beginnerPlan": "2 sets x 12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "hip_thrust",
-      "name": "臀推机/杠铃臀推 Hip thrust",
+      "name": "Barbell / Machine Hip Thrust",
       "group": "legs_glutes",
       "secondary": ["glute_max", "hamstrings"],
       "type": "free",
       "movement": ["hip_extend"],
-      "focus": "主打臀大肌",
-      "ins": "上背支撑稳定，脚掌踩地，膝约90度；向上顶髋，顶点夹臀，避免腰椎过度后仰。",
-      "beginnerPlan": "2-3组 x 10次，RPE 6-7",
-      "advancedPlan": "4组 x 6-10次，RPE 7-9"
+      "focus": "Primary activation of the gluteus maximus.",
+      "ins": "Support the upper back on a bench, plant feet flat on the floor with knees flexed at approximately 90 degrees. Extend the hips upward, fully contracting the glutes at the top. Avoid lumbar hyperextension by keeping the chin tucked and ribcage depressed.",
+      "beginnerPlan": "2-3 sets x 10 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 6-10 reps, RPE 7-9"
     },
     {
       "id": "hip_abductor",
-      "name": "髋外展机 Hip abductor machine",
+      "name": "Machine Hip Abduction",
       "group": "legs_glutes",
       "secondary": ["glute_med", "abductors"],
       "type": "fixed",
       "movement": ["abduction"],
-      "focus": "主打臀中肌、臀小肌、外展肌群",
-      "ins": "坐稳骨盆，双腿向外打开；动作范围以髋部可控为准；回程慢，不要让配重相撞。",
-      "beginnerPlan": "2组 x 12-15次，RPE 6-7",
-      "advancedPlan": "4组 x 12-15次，RPE 7-8"
+      "focus": "Targets the gluteus medius, gluteus minimus, and the broader hip abductor complex.",
+      "ins": "Sit with a stable pelvis and press the legs outward against the pads. Move within a controllable range of hip abduction. Return slowly, avoiding resting the weight plates between repetitions to maintain constant tension.",
+      "beginnerPlan": "2 sets x 12-15 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 12-15 reps, RPE 7-8"
     },
     {
       "id": "hip_adductor",
-      "name": "髋内收机 Hip adductor machine",
+      "name": "Machine Hip Adduction",
       "group": "legs_glutes",
       "secondary": ["adductors"],
       "type": "fixed",
       "movement": ["adduction"],
-      "focus": "主打内收肌群",
-      "ins": "双腿置于外侧挡垫，向中线夹拢；保持上身稳定，慢速回放。",
-      "beginnerPlan": "2组 x 12-15次，RPE 6-7",
-      "advancedPlan": "4组 x 10-15次，RPE 7-8"
+      "focus": "Isolation of the hip adductor complex.",
+      "ins": "Position the legs on the outside of the pads. Squeeze the thighs inward toward the midline. Maintain torso stability and perform a slow, controlled eccentric return.",
+      "beginnerPlan": "2 sets x 12-15 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 10-15 reps, RPE 7-8"
     },
     {
       "id": "biceps_curl_machine",
-      "name": "二头弯举机 Biceps curl machine",
+      "name": "Machine Biceps Curl",
       "group": "arms",
       "secondary": ["biceps", "brachialis"],
       "type": "fixed",
       "movement": ["elbow_flex"],
-      "focus": "主打肱二头肌与肱肌",
-      "ins": "肘关节与器械转轴对齐，上臂贴垫固定；屈肘卷起把手，离心阶段慢放。",
-      "beginnerPlan": "2组 x 12次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Targets the biceps brachii and brachialis.",
+      "ins": "Align the elbows with the machine's axis of rotation and rest the upper arms flat on the pad. Flex the elbows to curl the handles upward. Execute a controlled eccentric lowering phase.",
+      "beginnerPlan": "2 sets x 12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "triceps_pushdown",
-      "name": "三头下压 Triceps pushdown",
+      "name": "Cable Triceps Pushdown",
       "group": "arms",
       "secondary": ["triceps"],
       "type": "cable",
       "movement": ["elbow_extend"],
-      "focus": "主打肱三头肌外侧头和内侧头",
-      "ins": "肘贴近身体两侧，向下伸肘压到底；底部停顿后控制回到约90度。",
-      "beginnerPlan": "2组 x 12次，RPE 6-7",
-      "advancedPlan": "4组 x 8-12次，RPE 7-9"
+      "focus": "Targets the lateral and medial heads of the triceps brachii.",
+      "ins": "Pin the elbows strictly to the sides of the torso. Extend the elbows fully, pressing the attachment downward. Pause at peak contraction, then control the return until the elbows are at a 90-degree angle.",
+      "beginnerPlan": "2 sets x 12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 8-12 reps, RPE 7-9"
     },
     {
       "id": "ab_crunch_machine",
-      "name": "卷腹机 Abdominal crunch machine",
+      "name": "Machine Abdominal Crunch",
       "group": "core",
       "secondary": ["rectus_abdominis"],
       "type": "fixed",
       "movement": ["push"],
-      "focus": "主打腹直肌",
-      "ins": "胸垫贴合上半身，先收紧核心，再向前卷曲躯干；避免只用手臂拉动器械。",
-      "beginnerPlan": "2-3组 x 12-15次，RPE 6-7",
-      "advancedPlan": "4组 x 10-15次，RPE 7-8"
+      "focus": "Isolation of the rectus abdominis.",
+      "ins": "Secure the chest pad against the upper torso. Brace the core, then flex the spine forward to crunch the torso. Avoid using the arms to pull the weight; initiate the movement entirely via abdominal contraction.",
+      "beginnerPlan": "2-3 sets x 12-15 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 10-15 reps, RPE 7-8"
     },
     {
       "id": "cable_crunch",
-      "name": "绳索卷腹 Cable crunch",
+      "name": "Kneeling Cable Crunch",
       "group": "core",
       "secondary": ["rectus_abdominis", "transversus_abdominis"],
       "type": "cable",
       "movement": ["pull"],
-      "focus": "主打腹直肌，可调重量",
-      "ins": "高位滑轮绳索置于头侧，保持髋部稳定，通过胸廓向骨盆卷曲完成动作，缓慢回程。",
-      "beginnerPlan": "2组 x 12次，RPE 6-7",
-      "advancedPlan": "4组 x 10-15次，RPE 7-8"
+      "focus": "Scalable isolation of the rectus abdominis.",
+      "ins": "Attach a rope to a high pulley. Kneel and hold the rope behind the neck. Keep the hips stationary and flex the spine, bringing the ribcage down toward the pelvis. Return slowly with a controlled eccentric stretch.",
+      "beginnerPlan": "2 sets x 12 reps, RPE 6-7",
+      "advancedPlan": "4 sets x 10-15 reps, RPE 7-8"
     }
   ]
 }
