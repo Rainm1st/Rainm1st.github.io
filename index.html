@@ -39,6 +39,7 @@
           <button type="button" class="btn auth-eye-btn" id="toggleAuthPasswordConfirmBtn">显示</button>
         </div>
         <div class="small" id="authHint">教练仅支持登录，账号由项目组发放。</div>
+        <div class="small auth-quick-tip" id="authQuickTip"></div>
         <div class="btn-row">
           <button type="button" class="btn primary" id="authSubmitBtn">进入系统</button>
         </div>
@@ -51,7 +52,7 @@
         <h1 class="title">TrainerSync</h1>
         <p class="subtitle">教练与学员现场互动闭环</p>
       </div>
-      <div class="tabs">
+      <div class="tabs" hidden>
         <button class="tab-btn active" data-tab="traineeView">学员端</button>
         <button class="tab-btn" data-tab="coachView">教练端</button>
       </div>
@@ -190,6 +191,7 @@
             <div id="imagePlaceholder" class="media-box">[ 图片占位符 ]<br />选择器械后展示动作图解区域</div>
             <div id="exerciseGuide" class="guide-box">文字版使用说明：请选择器械查看具体动作说明与训练目标。</div>
           </div>
+
         </section>
 
         <section class="card">
