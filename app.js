@@ -3,7 +3,7 @@ const SYNC_CHANNEL_KEY = "trainerSync_state_channel_v1";
 const AUTH_SESSION_KEY = "trainerSync_auth_session_v1";
 const TRAINEE_USERS_KEY = "trainerSync_trainee_users_v1";
 const COACH_BINDINGS_KEY = "trainerSync_coach_bindings_v1";
-const LOGIN_DISABLED = true;
+const LOGIN_DISABLED = false;
 const $ = (id) => document.getElementById(id);
 const COACH_ACCOUNTS = [
   { username: "coach_c3", password: "C3Coach@208" },
@@ -16,6 +16,25 @@ const PET_META = [
   { id: "cat", name: "灵动猫", icon: "🐱" },
   { id: "dog", name: "冲刺犬", icon: "🐶" }
 ];
+
+const MEDIA_FALLBACK_MAP = {
+  eq_ab_crunch_machine: { equipment: "eq_ab_crunch_machine", exercise: "ex_ab_crunch_machine" },
+  eq_assisted_pullup: { equipment: "eq_assisted_pullup", exercise: "ex_assisted_pullup" },
+  eq_biceps_curl_machine: { equipment: "eq_biceps_curl_machine", exercise: "ex_biceps_curl_machine" },
+  eq_cable_station: { equipment: "eq_cable_station", exercise: "ex_face_pull" },
+  eq_free_weight: { equipment: "eq_free_weight", exercise: "ex_hip_thrust" },
+  eq_high_row: { equipment: "eq_high_row", exercise: "ex_high_row" },
+  eq_hip_abduction: { equipment: "eq_hip_abduction", exercise: "ex_hip_abduction" },
+  eq_hip_adduction: { equipment: "eq_hip_adduction", exercise: "ex_hip_adduction" },
+  eq_hip_thrust_machine: { equipment: "eq_hip_thrust_machine", exercise: "ex_hip_thrust" },
+  eq_lat_pulldown: { equipment: "eq_lat_pulldown", exercise: "ex_lat_pulldown" },
+  eq_leg_curl: { equipment: "eq_leg_curl", exercise: "ex_leg_curl" },
+  eq_leg_extension: { equipment: "eq_leg_extension", exercise: "ex_leg_extension" },
+  eq_seated_chest_press: { equipment: "eq_seated_chest_press", exercise: "ex_seated_chest_press" },
+  eq_seated_leg_press: { equipment: "eq_seated_leg_press", exercise: "ex_leg_press" },
+  eq_seated_row: { equipment: "eq_seated_row", exercise: "ex_seated_row" }
+};
+
 
 const FALLBACK_DATA = {
   muscleOptions: {
@@ -227,12 +246,26 @@ function updateAuthPanel() {
   const modeRow = $("traineeModeRow");
   const extra = $("registerExtraRow");
   const hint = $("authHint");
+  const quickTip = $("authQuickTip");
   const roleSel = $("authRoleSelect");
+  const passwordInput = $("authPassword");
+  const confirmInput = $("authPasswordConfirm");
   if (roleSel) roleSel.value = authRole;
   if (authRole === "coach") traineeAuthMode = "login";
   if (modeRow) modeRow.toggleAttribute("hidden", authRole !== "trainee");
   if (extra) extra.toggleAttribute("hidden", !(authRole === "trainee" && traineeAuthMode === "register"));
   if (hint) hint.textContent = authRole === "coach" ? "教练仅支持登录，账号由项目组发放。" : "学员可自由注册并登录。";
+  if (quickTip) {
+    if (authRole === "coach") {
+      quickTip.textContent = "演示教练账号：coach_c3 / C3Coach@208";
+    } else if (traineeAuthMode === "register") {
+      quickTip.textContent = "注册成功后将自动进入学员端。";
+    } else {
+      quickTip.textContent = "首次使用请切换到“注册”，创建学员账号。";
+    }
+  }
+  if (passwordInput) passwordInput.autocomplete = authRole === "trainee" && traineeAuthMode === "register" ? "new-password" : "current-password";
+  if (confirmInput) confirmInput.autocomplete = "new-password";
   document.querySelectorAll(".auth-mode-btn").forEach((b) => b.classList.toggle("active", b.dataset.mode === traineeAuthMode));
 }
 function setAuthStatus(msg, ok) {
@@ -264,7 +297,7 @@ function applySessionUI() {
     const tabs = document.querySelector(".header .tabs");
     if (gate) gate.hidden = true;
     if (headerAccount) headerAccount.hidden = true;
-    if (tabs) tabs.hidden = false;
+    if (tabs) tabs.hidden = true;
     return;
   }
   const authed = !!authSession;
@@ -273,17 +306,15 @@ function applySessionUI() {
   const headerAccount = $("headerAccount");
   const tabs = document.querySelector(".header .tabs");
   const sessionPill = $("sessionPill");
+  if (tabs) tabs.hidden = true;
   if (!authed) {
     if (gate) gate.hidden = false;
     if (headerAccount) headerAccount.hidden = true;
-    if (tabs) tabs.hidden = false;
-    setView("traineeView");
     return;
   }
   if (gate) gate.hidden = true;
   if (headerAccount) headerAccount.hidden = false;
   if (sessionPill) sessionPill.textContent = `${authSession.role === "coach" ? "教练" : "学员"}：${authSession.username}`;
-  if (tabs) tabs.hidden = true;
   if (authSession.role === "coach") {
     setView("coachView");
   } else {
@@ -309,6 +340,11 @@ function attemptAuth() {
     return;
   }
   if (authRole === "coach") {
+    if (username.length < 4) {
+      setAuthStatus("教练账号格式不正确");
+      showToast("教练账号格式不正确", 2200, "force");
+      return;
+    }
     const coach = findCoach(username, password);
     if (!coach) {
       authFailMap.coach += 1;
@@ -329,6 +365,11 @@ function attemptAuth() {
     return;
   }
   if (traineeAuthMode === "register") {
+    if (!/^[a-zA-Z0-9_]{4,20}$/.test(username)) {
+      setAuthStatus("账号需为 4-20 位字母/数字/下划线");
+      showToast("账号格式不正确", 2200, "force");
+      return;
+    }
     if (password.length < 4) {
       setAuthStatus("密码至少 4 位");
       showToast("密码至少 4 位", 2200, "force");
@@ -667,6 +708,35 @@ function renderMyCoaches() {
   box.innerHTML = list.length ? list.map((c) => `<span class="recommend-chip">${c}</span>`).join("") : `<span class="recommend-chip">暂未绑定教练</span>`;
 }
 
+function toAssetWebPath(path) {
+  return String(path || "").replace(/\\/g, "/");
+}
+
+function resolveMediaKey(ex) {
+  if (!ex) return "";
+  if (Array.isArray(ex.equipment_ids) && ex.equipment_ids.length) return ex.equipment_ids[0];
+  const byId = {
+    seated_chest_press: "eq_seated_chest_press",
+    lat_pulldown: "eq_lat_pulldown",
+    seated_row: "eq_seated_row",
+    face_pull: "eq_cable_station",
+    leg_press: "eq_seated_leg_press",
+    biceps_curl_machine: "eq_biceps_curl_machine",
+    ab_crunch_machine: "eq_ab_crunch_machine"
+  };
+  return byId[ex.id] || "";
+}
+
+function getMediaPaths(ex) {
+  const key = resolveMediaKey(ex);
+  const fallback = MEDIA_FALLBACK_MAP[key];
+  if (!fallback) return null;
+  return {
+    equipmentImg: `./assets/equipment/${fallback.equipment}/eq_${fallback.equipment.replace(/^eq_/, "")}.jpeg`,
+    exerciseImg: `./assets/equipment/${fallback.equipment}/${fallback.exercise}.jpeg`
+  };
+}
+
 function renderGuide(ex) {
   const title = $("mediaTitle"), video = $("videoPlaceholder"), image = $("imagePlaceholder"), guide = $("exerciseGuide");
   if (!title || !video || !image || !guide) return;
@@ -679,9 +749,15 @@ function renderGuide(ex) {
   }
   const level = state.trainee.level;
   const plan = level === "advanced" ? (ex.advancedPlan || "4组 x 6-10次，RPE 7-9") : (ex.beginnerPlan || "2-3组 x 10-12次，RPE 6-7");
+  const media = getMediaPaths(ex);
   title.innerHTML = `<b>动作指导：${ex.name}</b>`;
-  video.innerHTML = `[ 视频占位符 ]<br />${ex.name} 教学视频`;
-  image.innerHTML = `[ 图片占位符 ]<br />${ex.name} 动作分解图`;
+  if (media) {
+    video.innerHTML = `<div class="media-title">器械示意图</div><img class="media-img" src="${toAssetWebPath(media.equipmentImg)}" alt="${ex.name} 器械示意图" />`;
+    image.innerHTML = `<div class="media-title">动作示意图</div><img class="media-img" src="${toAssetWebPath(media.exerciseImg)}" alt="${ex.name} 动作示意图" />`;
+  } else {
+    video.innerHTML = `[ 视频占位符 ]<br />${ex.name} 教学视频`;
+    image.innerHTML = `[ 图片占位符 ]<br />${ex.name} 动作分解图`;
+  }
   guide.textContent = `使用说明：${ex.ins} 目标：${ex.focus} 训练处方（${level === "advanced" ? "进阶者" : "初学者"}）：${plan}`;
 }
 
@@ -896,6 +972,8 @@ function bindClick(id, fn) { const el = $(id); if (el) el.addEventListener("clic
 
 document.querySelectorAll(".tab-btn").forEach((btn) => btn.addEventListener("click", () => {
   if (authSession) return;
+  const tabs = document.querySelector(".header .tabs");
+  if (tabs && tabs.hidden) return;
   document.querySelectorAll(".tab-btn").forEach((x) => x.classList.toggle("active", x === btn));
   document.querySelectorAll(".view").forEach((v) => {
     const on = v.id === btn.dataset.tab;
