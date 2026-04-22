@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gym Map Coordinate Picker</title>
+  <style>
+    :root {
+      --bg: #0a1624;
+      --panel: #18283d;
+      --line: rgba(255,255,255,.14);
+      --text: #f6fbff;
+      --muted: #9fb4cb;
+      --brand: #3bd6ff;
+      --brand2: #35f5b6;
+      --amber: #ffc95d;
+      --danger: #ff7a7a;
+      --purple: #b685ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .wrapper { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+
+    h1 { font-size: 1.6rem; margin: 0 0 4px; }
+    .subtitle { color: var(--muted); margin: 0 0 24px; font-size: .92rem; }
+
+    .instructions {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: .9rem;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .instructions strong { color: var(--text); }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .controls label { font-size: .85rem; color: var(--muted); }
+    .controls input[type="file"] { color: var(--text); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+    .controls select, .controls input[type="text"] {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: .85rem;
+    }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 9px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: .85rem;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: #04131d; }
+    .btn-danger { background: rgba(255,103,103,.2); color: #ffe0e0; border: 1px solid rgba(255,103,103,.3); }
+
+    /* The clickable map area */
+    .map-area {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid var(--line);
+      background: #0d2035;
+      min-height: 200px;
+      cursor: crosshair;
+      user-select: none;
+      max-height: 600px;
+    }
+    .map-area img {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+    }
+    .map-area.no-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--muted);
+    }
+    .map-area.no-image .big-icon { font-size: 3rem; }
+    .map-area.no-image p { margin: 0; font-size: .9rem; }
+
+    /* Crosshair */
+    .crosshair {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--brand);
+      border-radius: 50%;
+      background: rgba(59,214,255,.2);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10;
+      transition: left .05s, top .05s;
+    }
+    .crosshair::before, .crosshair::after {
+      content: '';
+      position: absolute;
+      background: var(--brand);
+    }
+    .crosshair::before { width: 1px; height: 30px; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+    .crosshair::after  { width: 30px; height: 1px; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+
+    /* Click ripple */
+    .ripple {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border: 2.5px solid var(--amber);
+      border-radius: 50%;
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+      z-index: 11;
+      animation: rippleOut .6s ease-out forwards;
+    }
+    @keyframes rippleOut {
+      0%   { transform: translate(-50%,-50%) scale(.4); opacity: 1; }
+      100% { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
+    }
+
+    /* Output panel */
+    .output-panel {
+      margin-top: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+    }
+    .output-panel h3 { margin: 0 0 16px; font-size: 1rem; }
+    .coord-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+    .coord-field { display: flex; flex-direction: column; gap: 4px; }
+    .coord-field label { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+    .coord-field input {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+    }
+    .coord-field input:focus { outline: 1px solid var(--brand); }
+
+    /* Equipment selector */
+    .equip-selector {
+      margin-bottom: 16px;
+    }
+    .equip-selector select {
+      width: 100%;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: .9rem;
+    }
+
+    /* Generated code block */
+    .code-block {
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: .88rem;
+      line-height: 1.6;
+      color: var(--brand2);
+      word-break: break-all;
+      margin-bottom: 14px;
+      min-height: 52px;
+    }
+
+    /* Point list */
+    .point-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 14px;
+    }
+    .point-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: .85rem;
+    }
+    .point-item .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid;
+    }
+    .point-item .name { flex: 1; font-weight: 700; }
+    .point-item .coords { color: var(--muted); font-family: monospace; font-size: .8rem; }
+    .point-item .del {
+      background: rgba(255,103,103,.15);
+      border: 1px solid rgba(255,103,103,.25);
+      border-radius: 6px;
+      color: #ff9999;
+      padding: 2px 8px;
+      cursor: pointer;
+      font-size: .75rem;
+    }
+
+    .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Export */
+    .export-area { margin-top: 16px; }
+    .export-area textarea {
+      width: 100%;
+      background: rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      color: var(--brand2);
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+      padding: 12px;
+      height: 180px;
+      resize: vertical;
+    }
+    .export-area label { font-size: .8rem; color: var(--muted); margin-bottom: 6px; display: block; }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <h1>🏋️ Gym Map Coordinate Picker</h1>
+  <p class="subtitle">Click on your gym floor plan to capture x/y positions for each equipment piece.</p>
+
+  <div class="instructions">
+    <strong>How to use:</strong><br/>
+    1. Click <strong>Load Gym Map</strong> and select your floor plan image (JPG/PNG).<br/>
+    2. Click directly on each <strong>equipment location</strong> on the map — the crosshair snaps to click position.<br/>
+    3. Pick the <strong>equipment name</strong> from the dropdown, then click <strong>Add Point</strong>.<br/>
+    4. When done, copy the <strong>Export Code</strong> and paste it into <code>gym-locations.js</code>.
+  </div>
+
+  <div class="controls">
+    <input type="file" id="imgInput" accept="image/*" />
+    <label>Equipment:</label>
+    <select id="equipSelect">
+      <option value="">— pick equipment —</option>
+      <option value="eq_seated_chest_press">坐式胸推 · Seated Chest Press · Chest</option>
+      <option value="eq_lat_pulldown">高位下拉 · Lat Pulldown · Back</option>
+      <option value="eq_seated_row">坐式划船 · Seated Row · Back</option>
+      <option value="eq_high_row">高位划船 · High Row · Traps/Rear Delts</option>
+      <option value="eq_assisted_pullup">辅助引体 · Assisted Pull-Up · Back</option>
+      <option value="eq_cable_station">绳索站 · Cable Station · Rear Delt/Triceps/Abs</option>
+      <option value="eq_seated_leg_press">坐式腿推 · Seated Leg Press · Quads/Glutes</option>
+      <option value="eq_leg_extension">腿伸展 · Leg Extension · Quads</option>
+      <option value="eq_leg_curl">腿弯举 · Leg Curl · Hamstrings</option>
+      <option value="eq_free_weight">自由重量 · Hip Thrust · Glutes</option>
+      <option value="eq_hip_thrust_machine">臀推机 · Hip Thrust Machine · Glutes</option>
+      <option value="eq_hip_abduction">髋外展 · Hip Abduction · Glute Med</option>
+      <option value="eq_hip_adduction">髋内收 · Hip Adduction · Adductors</option>
+      <option value="eq_biceps_curl_machine">二头弯举机 · Biceps Curl · Biceps</option>
+      <option value="eq_ab_crunch_machine">腹肌机器 · Machine Abdominal Crunch · Abs</option>
+      <option value="eq_other">Other / Custom</option>
+    </select>
+    <input type="text" id="customName" placeholder="Custom label (optional)" style="flex:1;min-width:160px;" />
+    <button class="btn btn-primary" id="addBtn">Add Point</button>
+    <button class="btn btn-danger" id="clearBtn">Clear All</button>
+  </div>
+
+  <div class="map-area no-image" id="mapArea">
+    <div class="big-icon">🗺️</div>
+    <p>Load your gym floor plan image above to start picking coordinates</p>
+  </div>
+
+  <div class="output-panel">
+    <h3>📍 Pinned Points</h3>
+    <div class="point-list" id="pointList">
+      <div style="color:var(--muted);font-size:.85rem;padding:8px 0;">No points yet — click the map to start.</div>
+    </div>
+
+    <h3>📋 Export Code for gym-locations.js</h3>
+    <div class="code-block" id="codeBlock">Paste this into the GYM_LOCATIONS object in gym-locations.js</div>
+    <div class="action-row">
+      <button class="btn btn-primary" id="copyBtn">📋 Copy to Clipboard</button>
+      <button class="btn" id="exportBtn" style="background:rgba(255,255,255,.08);color:var(--text);border:1px solid rgba(255,255,255,.14)">↓ Download as File</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const mapArea = document.getElementById("mapArea");
+const imgInput = document.getElementById("imgInput");
+const equipSelect = document.getElementById("equipSelect");
+const customName = document.getElementById("customName");
+const addBtn = document.getElementById("addBtn");
+const clearBtn = document.getElementById("clearBtn");
+const pointList = document.getElementById("pointList");
+const codeBlock = document.getElementById("codeBlock");
+const copyBtn = document.getElementById("copyBtn");
+const exportBtn = document.getElementById("exportBtn");
+
+let currentX = 0, currentY = 0;
+let currentImg = null;
+let points = [];   // { id, label, x, y }
+let crosshairEl = null;
+
+const DOT_COLORS = [
+  "#3bd6ff","#ff6b6b","#ffd166","#a29bfe","#51cf66",
+  "#ff922b","#748ffc","#63e6be","#ff6eb4","#ffd43b",
+  "#69db7c","#4dabf7","#f783ac","#da77f2","#e599f7"
+];
+let dotColorIdx = 0;
+
+function nextColor() {
+  return DOT_COLORS[dotColorIdx++ % DOT_COLORS.length];
+}
+
+// ── Load image ──────────────────────────────────────────────────────────────
+imgInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  mapArea.classList.remove("no-image");
+  mapArea.innerHTML = `<img src="${url}" id="mapImg" alt="Gym floor plan" />`;
+  crosshairEl = document.createElement("div");
+  crosshairEl.className = "crosshair";
+  crosshairEl.style.left = "0%";
+  crosshairEl.style.top = "0%";
+  mapArea.appendChild(crosshairEl);
+
+  // Restore previous points as colored dots
+  const img = document.getElementById("mapImg");
+  img.addEventListener("load", () => {
+    currentImg = img;
+    renderPointDots();
+  });
+});
+
+// ── Click on map ────────────────────────────────────────────────────────────
+mapArea.addEventListener("click", (e) => {
+  const img = document.getElementById("mapImg");
+  if (!img) return;
+  const rect = img.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  if (x < 0 || x > 100 || y < 0 || y > 100) return;
+
+  currentX = parseFloat(x.toFixed(2));
+  currentY = parseFloat(y.toFixed(2));
+
+  if (crosshairEl) {
+    crosshairEl.style.left = currentX + "%";
+    crosshairEl.style.top = currentY + "%";
+  }
+
+  // Ripple
+  const ripple = document.createElement("div");
+  ripple.className = "ripple";
+  ripple.style.left = e.clientX - mapArea.getBoundingClientRect().left + "px";
+  ripple.style.top = e.clientY - mapArea.getBoundingClientRect().top + "px";
+  mapArea.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove());
+
+  renderCode();
+});
+
+// ── Add point ───────────────────────────────────────────────────────────────
+addBtn.addEventListener("click", () => {
+  const equipId = equipSelect.value;
+  let label = customName.value.trim();
+
+  if (!currentImg) { alert("Please load the gym map image first."); return; }
+  if (!equipId && !label) { alert("Please select or type an equipment name."); return; }
+
+  // Build label from select
+  if (!label) {
+    const opt = equipSelect.options[equipSelect.selectedIndex];
+    label = opt.text;
+  }
+
+  // Detect duplicates
+  const dup = points.find(p => p.id === equipId || p.label === label);
+  if (dup) {
+    // Update existing
+    dup.x = currentX;
+    dup.y = currentY;
+    dup.label = label;
+    dup.id = equipId || `eq_custom_${label.replace(/\s+/g, "_").toLowerCase()}`;
+  } else {
+    points.push({
+      id: equipId || `eq_custom_${label.replace(/\s+/g, "_").toLowerCase()}`,
+      label,
+      x: currentX,
+      y: currentY
+    });
+  }
+
+  equipSelect.value = "";
+  customName.value = "";
+  renderPointList();
+  renderPointDots();
+  renderCode();
+});
+
+// ── Delete point ────────────────────────────────────────────────────────────
+function deletePoint(idx) {
+  points.splice(idx, 1);
+  renderPointList();
+  renderPointDots();
+  renderCode();
+}
+
+// ── Render point list ───────────────────────────────────────────────────────
+function renderPointList() {
+  if (!points.length) {
+    pointList.innerHTML = `<div style="color:var(--muted);font-size:.85rem;padding:8px 0;">No points yet — click the map, pick equipment, then "Add Point".</div>`;
+    return;
+  }
+  pointList.innerHTML = points.map((p, i) => `
+    <div class="point-item">
+      <div class="dot" style="background:${p.color||"#3bd6ff"}44;border-color:${p.color||"#3bd6ff"}"></div>
+      <div class="name">${p.label}</div>
+      <div class="coords">x: ${p.x}% &nbsp; y: ${p.y}%</div>
+      <button class="del" onclick="deletePoint(${i})">✕</button>
+    </div>
+  `).join("");
+}
+
+// ── Render colored dots on the map ─────────────────────────────────────────
+function renderPointDots() {
+  const mapImg = document.getElementById("mapImg");
+  if (!mapImg) return;
+  // Remove old dots
+  mapArea.querySelectorAll(".map-pin-dot").forEach(el => el.remove());
+  points.forEach(p => {
+    const dot = document.createElement("div");
+    dot.className = "map-pin-dot";
+    const color = p.color || nextColor();
+    p.color = color;
+    dot.style.cssText = `
+      position: absolute;
+      left: ${p.x}%;
+      top: ${p.y}%;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: ${color}cc;
+      border: 2.5px solid #fff;
+      box-shadow: 0 0 0 3px ${color}55, 0 4px 10px rgba(0,0,0,.5);
+      transform: translate(-50%,-50%);
+      pointer-events: none;
+      z-index: 8;
+      animation: dotPulse 2s ease-in-out infinite;
+    `;
+    dot.title = `${p.label} (x:${p.x}%, y:${p.y}%)`;
+    mapArea.appendChild(dot);
+
+    // Label
+    const lbl = document.createElement("div");
+    lbl.style.cssText = `
+      position: absolute;
+      left: ${p.x}%;
+      top: ${p.y - 8}%;
+      transform: translateX(-50%);
+      background: rgba(10,22,36,.88);
+      border: 1px solid ${color}88;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: .7rem;
+      font-weight: 700;
+      color: ${color};
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 9;
+    `;
+    lbl.textContent = p.label;
+    mapArea.appendChild(lbl);
+  });
+}
+
+// ── Render export code ──────────────────────────────────────────────────────
+function renderCode() {
+  if (!points.length) {
+    codeBlock.textContent = "// Click the map and add points to generate code";
+    return;
+  }
+  const lines = points.map(p =>
+    `  "${p.id}": { x: ${p.x.toFixed(2)}, y: ${p.y.toFixed(2)}, label: "${p.label}" },`
+  );
+  codeBlock.textContent = `const GYM_LOCATIONS = {\n${lines.join("\n")}\n};`;
+}
+
+// ── Copy ────────────────────────────────────────────────────────────────────
+copyBtn.addEventListener("click", () => {
+  if (!points.length) { alert("No points to copy yet."); return; }
+  const lines = points.map(p =>
+    `  "${p.id}": { x: ${p.x.toFixed(2)}, y: ${p.y.toFixed(2)}, label: "${p.label}" },`
+  );
+  const code = `const GYM_LOCATIONS = {\n${lines.join("\n")}\n};`;
+  navigator.clipboard.writeText(code).then(() => {
+    copyBtn.textContent = "✅ Copied!";
+    setTimeout(() => copyBtn.textContent = "📋 Copy to Clipboard", 1500);
+  });
+});
+
+// ── Download ────────────────────────────────────────────────────────────────
+exportBtn.addEventListener("click", () => {
+  if (!points.length) { alert("No points to export."); return; }
+  const lines = points.map(p =>
+    `  "${p.id}": { x: ${p.x.toFixed(2)}, y: ${p.y.toFixed(2)}, label: "${p.label}" },`
+  );
+  const code = `const GYM_LOCATIONS = {\n${lines.join("\n")}\n};`;
+  const blob = new Blob([code], { type: "text/javascript" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "gym-locations-generated.js";
+  a.click();
+});
+
+// ── Clear ───────────────────────────────────────────────────────────────────
+clearBtn.addEventListener("click", () => {
+  if (points.length && !confirm("Clear all " + points.length + " points?")) return;
+  points = [];
+  dotColorIdx = 0;
+  renderPointList();
+  renderPointDots();
+  renderCode();
+});
+
+// Init
+renderCode();
+</script>
+<style>
+.map-pin-dot { animation: dotPulse 2s ease-in-out infinite; }
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(59,214,255,.35), 0 4px 12px rgba(0,0,0,.5); }
+  50%      { box-shadow: 0 0 0 7px rgba(59,214,255,.18), 0 4px 16px rgba(0,0,0,.5); }
+}
+</style>
+</body>
+</html>
